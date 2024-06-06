@@ -42,7 +42,7 @@ namespace DrawLines
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left&&option==0)
+            if (e.Button == MouseButtons.Left && option == 0)
             {
                 x = e.X;
                 y = e.Y;
@@ -160,6 +160,14 @@ namespace DrawLines
                             G.DrawEllipse(Pens.Black, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
                             G.Dispose();
                         }
+                        else if (c1.Option == 2)
+                        {
+                            ar.Add(c1);
+                            Graphics G = CreateGraphics();
+                            G.FillRectangle(Brushes.Red, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
+                            G.DrawRectangle(Pens.Black, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
+                            G.Dispose();
+                        }
                     }
                 }
             }
@@ -231,6 +239,24 @@ namespace DrawLines
 
                         bf.Serialize(ns, c);
                     }
+                    else if (option == 2)
+                    {
+                        Random random = new Random();
+                        CMyData1 c = new CMyData1();
+                        c.Size = random.Next(30, 100);
+                        c.Point = new Point(e.X, e.Y);
+                        c.Option = option; // 현재 option 값 설정
+
+                        if (data1 == null)
+                        {
+                            data1 = new CMyData1();
+                        }
+
+                        data1.AR.Add(c); // 배열에 저장
+                        G.FillRectangle(Brushes.Red, c.Point.X, c.Point.Y, c.Size, c.Size);
+                        G.DrawRectangle(Pens.Black, c.Point.X, c.Point.Y, c.Size, c.Size);
+                        bf.Serialize(ns, c);
+                    }
 
                     G.Dispose();
                 }
@@ -260,12 +286,12 @@ namespace DrawLines
 
         private void 삼각형ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            option = 3;
+            option = 0;
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (tclient.Connected&&option == 0) // 이 프로그램은 연결이 되있어야만 그릴 수 있음
+            if (tclient.Connected && option == 0) // 이 프로그램은 연결이 되있어야만 그릴 수 있음
             {
                 NetworkStream ns = tclient.GetStream();
                 BinaryFormatter bf = new BinaryFormatter();

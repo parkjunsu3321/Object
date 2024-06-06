@@ -30,14 +30,14 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.대화상자ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.모양ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.원ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.사각형ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.삼각형ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,29 +61,6 @@
             this.대화상자ToolStripMenuItem.Text = "대화상자";
             this.대화상자ToolStripMenuItem.Click += new System.EventHandler(this.대화상자ToolStripMenuItem_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(551, 27);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "연결";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(632, 32);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 12);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "연결 안 됨";
-            // 
             // 모양ToolStripMenuItem
             // 
             this.모양ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -106,12 +83,37 @@
             this.사각형ToolStripMenuItem.Name = "사각형ToolStripMenuItem";
             this.사각형ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.사각형ToolStripMenuItem.Text = "사각형";
+            this.사각형ToolStripMenuItem.Click += new System.EventHandler(this.사각형ToolStripMenuItem_Click);
             // 
             // 삼각형ToolStripMenuItem
             // 
             this.삼각형ToolStripMenuItem.Name = "삼각형ToolStripMenuItem";
             this.삼각형ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.삼각형ToolStripMenuItem.Text = "삼각형";
+            this.삼각형ToolStripMenuItem.Click += new System.EventHandler(this.삼각형ToolStripMenuItem_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(551, 27);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "연결";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(632, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 12);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "연결 안 됨";
             // 
             // Form1
             // 
