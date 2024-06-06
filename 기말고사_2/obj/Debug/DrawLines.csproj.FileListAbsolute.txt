@@ -29,3 +29,14 @@ C:\Users\정주환\Desktop\닷넷\2021 기말고사\2021 기말고사_2\obj\Debu
 C:\Users\정주환\Desktop\닷넷\2021 기말고사\2021 기말고사_2\obj\Debug\DrawLines.csproj.CoreCompileInputs.cache
 C:\Users\정주환\Desktop\닷넷\2021 기말고사\2021 기말고사_2\obj\Debug\DrawLines.exe
 C:\Users\정주환\Desktop\닷넷\2021 기말고사\2021 기말고사_2\obj\Debug\DrawLines.pdb
+C:\Users\정주환\Desktop\Object\기말고사_2\bin\Debug\DrawLines.exe.config
+C:\Users\정주환\Desktop\Object\기말고사_2\bin\Debug\DrawLines.exe
+C:\Users\정주환\Desktop\Object\기말고사_2\bin\Debug\DrawLines.pdb
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.csprojAssemblyReference.cache
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.Form1.resources
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.Form2.resources
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.Properties.Resources.resources
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.csproj.GenerateResource.cache
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.csproj.CoreCompileInputs.cache
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.exe
+C:\Users\정주환\Desktop\Object\기말고사_2\obj\Debug\DrawLines.pdb

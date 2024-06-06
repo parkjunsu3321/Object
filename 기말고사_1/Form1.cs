@@ -111,7 +111,7 @@ namespace DrawLines
             th1.Start();
         }
 
-        private void socketSendReceive() //스레드 용 함수
+        private void socketSendReceive() // 스레드 용 함수
         {
             TcpListener listener = new TcpListener(IPAddress.Any, 8000);
             listener.Start();
@@ -119,50 +119,52 @@ namespace DrawLines
             if (serverClient.Connected)
             {
                 NetworkStream ns = serverClient.GetStream();
-                CMyData c = new CMyData();
-                CMyData1 c1 = new CMyData1();
-                CPoint cp = new CPoint();
                 while (true)
                 {
                     BinaryFormatter bf = new BinaryFormatter();
+                    object obj = bf.Deserialize(ns);
 
-                    if (option == 0)
+                    if (obj is CPoint cp)
                     {
-                        cp = (CPoint)bf.Deserialize(ns); //데이터 받음
-                        if (cp.isMouseUp) //MouseUp이 True이면 선을 다 그렸다는 뜻이므로, 쌓인 데이터를 저장함
+                        if (cp.Option == 0)
                         {
-                            total_lines.AddLast(c);
-                            cp = new CPoint();
-                            c = new CMyData();
-                        }
-                        else
-                        {
-                            if (c.AR.Count == 0) //Count가 0인 경우 선을 처음 그려주는 것, 처음일 경우의 데이터 추가
+                            if (cp.isMouseUp)
                             {
-                                c.AR.Add(cp.Start);
-                                c.Color = cp.Color;
-                                c.Width = cp.Width;
+                                total_lines.AddLast(cp.ToCMyData());
                             }
-                            c.AR.Add(cp.End);
+                            else
+                            {
+                                CMyData c = total_lines.Last?.Value ?? new CMyData();
+                                if (c.AR.Count == 0)
+                                {
+                                    c.AR.Add(cp.Start);
+                                    c.Color = cp.Color;
+                                    c.Width = cp.Width;
+                                }
+                                c.AR.Add(cp.End);
 
+                                Graphics G = CreateGraphics();
+                                Pen p = new Pen(c.Color, c.Width);
+                                G.DrawLine(p, cp.Start, cp.End);
+                                G.Dispose();
+                            }
+                        }
+                    }
+                    else if (obj is CMyData1 c1)
+                    {
+                        if (c1.Option == 1)
+                        {
+                            ar.Add(c1);
                             Graphics G = CreateGraphics();
-                            Pen p = new Pen(c.Color, c.Width);
-                            G.DrawLine(p, cp.Start, cp.End); //받은 값들로 그려준다
+                            G.FillEllipse(Brushes.Red, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
+                            G.DrawEllipse(Pens.Black, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
                             G.Dispose();
                         }
                     }
-                    else if (option == 1)
-                    {
-                        c1 = (CMyData1)bf.Deserialize(ns);
-                        ar.Add(c1);
-                        Graphics G = CreateGraphics();
-                        G.FillEllipse(Brushes.Red, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
-                        G.DrawEllipse(Pens.Black, c1.Point.X, c1.Point.Y, c1.Size, c1.Size);
-                    }
-
                 }
             }
         }
+
 
         private void button1_Click(object sender, EventArgs e) //버튼 클릭 시 지정된 서버:포트 로 연결해줌.
         {
@@ -178,50 +180,63 @@ namespace DrawLines
         {
             if (Capture && e.Button == MouseButtons.Left)
             {
-                if (tclient.Connected) // 이 프로그램은 연결이 되있어야만 그릴 수 있다.
+                if (tclient != null && tclient.Connected) // 연결이 되어 있어야만 그릴 수 있다.
                 {
                     NetworkStream ns = tclient.GetStream();
                     BinaryFormatter bf = new BinaryFormatter();
+
+                    if (data == null)
+                    {
+                        data = new CMyData();
+                        data.Color = CurrentPenColor;
+                        data.Width = iCurrentPenWidth;
+                    }
 
                     cpoint = new CPoint(); //cpoint 생성
                     cpoint.Color = CurrentPenColor; //펜 색상
                     cpoint.Width = iCurrentPenWidth; //펜 굵기
                     cpoint.Start = new Point(x, y); //시작 점
+                    cpoint.Option = option; // 현재 option 값 설정
 
                     Graphics G = CreateGraphics();
                     Pen p = new Pen(data.Color, data.Width);
+
                     if (option == 0)
                     {
                         G.DrawLine(p, x, y, e.X, e.Y);
                         x = e.X;
                         y = e.Y;
 
-                        cpoint.End = new Point(x, y); //끝 점
+                        cpoint.End = new Point(x, y); // 끝 점
 
                         data.AR.Add(new Point(x, y));
                         bf.Serialize(ns, cpoint);
                     }
                     else if (option == 1)
                     {
-                        Random Random = new Random();
+                        Random random = new Random();
                         CMyData1 c = new CMyData1();
-                        c.Size = (int)Random.Next(30, 100);
+                        c.Size = random.Next(30, 100);
                         c.Point = new Point(e.X, e.Y);
-                        data1.AR.Add(c); //배열에 저장
+                        c.Option = option; // 현재 option 값 설정
+
+                        if (data1 == null)
+                        {
+                            data1 = new CMyData1();
+                        }
+
+                        data1.AR.Add(c); // 배열에 저장
                         G.FillEllipse(Brushes.Red, c.Point.X, c.Point.Y, c.Size, c.Size);
                         G.DrawEllipse(Pens.Black, c.Point.X, c.Point.Y, c.Size, c.Size);
 
                         bf.Serialize(ns, c);
                     }
 
-
-
-                    //cpoint를 바이너리 포맷으로 시리얼라이즈해서 ns로 전송
-                    //G.Dispose();
+                    G.Dispose();
                 }
             }
-
         }
+
 
         private void 모양ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -262,34 +277,37 @@ namespace DrawLines
     }
 
     [Serializable]
-    class CMyData
+    class CPoint //데이터를 전송하기 위한 Class
     {
-        private ArrayList Ar;
+        public bool isMouseUp { get; set; }
+        public Point Start { get; set; }
+        public Point End { get; set; }
+        public Color Color { get; set; }
+        public int Width { get; set; }
+        public int Option { get; set; } // 추가된 속성
+        public CPoint()
+        {
+            isMouseUp = false;
+        }
 
-        public CMyData()  //생성자함수
+        public CMyData ToCMyData()
         {
-            Ar = new ArrayList();
-        }
-        public Color Color
-        {
-            get;
-            set;
-        }
-        public int Width
-        {
-            get;
-            set;
-        }
-        public ArrayList AR
-        {
-            get { return Ar; }
+            CMyData data = new CMyData();
+            data.Color = this.Color;
+            data.Width = this.Width;
+            data.AR.Add(this.Start);
+            data.AR.Add(this.End);
+            return data;
         }
     }
+
+    [Serializable]
     class CMyData1
     {
         private Point point;
         private int size;
         private ArrayList Ar;
+        public int Option { get; set; } // 추가된 속성
 
         public CMyData1()  //생성자함수
         {
@@ -312,22 +330,13 @@ namespace DrawLines
     }
 
     [Serializable]
-    class CPoint //데이터를 전송하기 위한 Class
+    class CMyData
     {
-        public bool isMouseUp
+        private ArrayList Ar;
+
+        public CMyData()  //생성자함수
         {
-            get;
-            set;
-        }
-        public Point Start
-        {
-            get;
-            set;
-        }
-        public Point End
-        {
-            get;
-            set;
+            Ar = new ArrayList();
         }
         public Color Color
         {
@@ -339,9 +348,9 @@ namespace DrawLines
             get;
             set;
         }
-        public CPoint()
+        public ArrayList AR
         {
-            isMouseUp = false;
+            get { return Ar; }
         }
     }
 
